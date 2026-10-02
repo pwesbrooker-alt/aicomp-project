@@ -1,0 +1,570 @@
+/* ==========================================================================
+   STYLES.CSS — "Two Voices" theme
+   For a personal documentary report on AI companionship (Kindroid, with
+   reference to other platforms), balancing a positive first-hand account
+   against cited warnings and study evidence.
+
+   DESIGN CONCEPT
+   ---------------
+   The subject is a relationship between a human voice and a machine voice,
+   so the whole system is built around that duality rather than a generic
+   "tech" look:
+
+     - a warm, human accent (terracotta-clay) for your own narration,
+       reflections and direct quotes
+     - a cool, machine accent (deep teal) for anything that is the AI's
+       output — chat excerpts, model behaviour, platform features
+     - a muted brick-red for the warning / study-evidence material, so it
+       reads as "take this seriously" without resorting to alarm-red
+
+   Typography pairs a text-weight serif (the human, documentary voice) with
+   a monospace face (the machine voice, citations, and small metadata) —
+   two families, clearly distinct roles, nothing decorative layered on top.
+
+   Layout is a single reading column, left-aligned, under 75 characters per
+   line, on a soft cool-white ground (not the cliché warm cream) so it reads
+   like a well-set screen rather than printed paper — appropriate for a
+   report about digital life.
+
+   Structural devices (the left-hand voice bars, the reference numbering,
+   the callout label) all encode *whose voice this is* or *what kind of
+   claim this is* — they are not decoration.
+   ========================================================================== */
+
+/* ---- Fonts --------------------------------------------------------------
+   Source Serif 4  → long-form narrative voice (body text, headings)
+   IBM Plex Mono   → the machine voice: AI quotes, labels, citations, nav
+   Add these to your HTML <head>, or self-host them:
+
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+   -------------------------------------------------------------------------- */
+
+/* ---- 1. Design tokens ---------------------------------------------------- */
+:root {
+  /* colour */
+  --bg: #f5f6f5; /* page ground: soft cool-white, screen-adjacent */
+  --bg-panel: #eceeed; /* callouts, code/quote panels */
+  --bg-panel-warn: #f3e9e6; /* warning / study-evidence panel */
+  --ink: #1c232a; /* primary text */
+  --ink-soft: #4a535c; /* secondary text, captions, metadata */
+  --ink-faint: #7a8289; /* footnote numerals, timestamps */
+  --line: #d7dbda; /* hairline rules */
+  --line-strong: #b9c0be;
+
+  --human: #a8562e; /* your voice — warm clay */
+  --human-tint: #efe0d6;
+  --ai: #1f6f78; /* the AI's voice — deep teal */
+  --ai-tint: #dce9e9;
+  --warn: #8c3b32; /* studies / cautions — muted brick */
+  --warn-tint: #f3e4e1;
+  --link: #1f6f78;
+  --link-visited: #6b4a63;
+
+  /* type */
+  --font-body: "Source Serif 4", Georgia, "Iowan Old Style", serif;
+  --font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+
+  --step-0: 1rem; /* body */
+  --step-1: 1.125rem; /* lede / intro paragraphs */
+  --step-2: 1.375rem; /* h3 */
+  --step-3: 1.75rem; /* h2 */
+  --step-4: 2.35rem; /* h1 */
+
+  --measure: 42rem; /* ~72–75 characters at body size */
+  --measure-narrow: 34rem;
+
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.75rem;
+  --space-4: 2.75rem;
+  --space-5: 4.5rem;
+
+  --radius: 3px; /* deliberately small and uniform — not a rounded-card kit */
+}
+
+/* ---- 2. Reset / base ------------------------------------------------------ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: light;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  line-height: 1.65;
+  font-weight: 400;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+svg,
+video {
+  max-width: 100%;
+  display: block;
+}
+
+::selection {
+  background: var(--ai-tint);
+  color: var(--ink);
+}
+
+a {
+  color: var(--link);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+}
+a:visited {
+  color: var(--link-visited);
+}
+a:hover {
+  text-decoration-thickness: 2px;
+}
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--ai);
+  outline-offset: 2px;
+}
+
+/* ---- 3. Page shell -------------------------------------------------------- */
+.page,
+main {
+  max-width: var(--measure);
+  margin-inline: auto;
+  padding: var(--space-4) var(--space-2) var(--space-5);
+}
+
+/* Masthead — sits above the reading column, sets the documentary register.
+   No tracked-out eyebrow label; the section name is plain small text. */
+.masthead {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: var(--space-4) var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--line);
+}
+
+.masthead .section-name {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  margin: 0 0 var(--space-2);
+}
+
+.masthead h1 {
+  margin: 0 0 var(--space-1);
+}
+
+.masthead .dek {
+  font-size: var(--step-1);
+  color: var(--ink-soft);
+  max-width: var(--measure);
+  margin: 0;
+}
+
+.masthead .meta {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--ink-faint);
+  margin-top: var(--space-2);
+}
+
+/* ---- 4. Headings & text ---------------------------------------------------- */
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-body);
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.2;
+  margin: var(--space-4) 0 var(--space-2);
+}
+
+h1 {
+  font-size: var(--step-4);
+  font-weight: 500;
+}
+h2 {
+  font-size: var(--step-3);
+  border-top: 1px solid var(--line);
+  padding-top: var(--space-3);
+}
+h3 {
+  font-size: var(--step-2);
+}
+h4 {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+
+p {
+  margin: 0 0 var(--space-2);
+}
+
+.lede {
+  font-size: var(--step-1);
+  color: var(--ink-soft);
+  max-width: var(--measure);
+}
+
+ul,
+ol {
+  padding-left: 1.3em;
+  margin: 0 0 var(--space-2);
+}
+li {
+  margin-bottom: 0.4em;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: var(--space-4) 0;
+}
+
+small,
+.caption,
+.metadata {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--ink-faint);
+}
+
+/* ---- 5. Two voices: chat excerpts ------------------------------------------
+   Use these for quoted dialogue between you and a companion AI. The colour
+   bar on the left is the only thing that tells you apart — consistent,
+   legible, not a chat-bubble pastiche. */
+
+blockquote {
+  margin: var(--space-3) 0;
+  padding: var(--space-2) var(--space-3);
+  background: var(--bg-panel);
+  border-left: 3px solid var(--line-strong);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+.voice-human,
+.voice-ai {
+  font-size: 0.98rem;
+}
+
+.voice-human {
+  border-left-color: var(--human);
+  background: var(--human-tint);
+}
+
+.voice-ai {
+  border-left-color: var(--ai);
+  background: var(--ai-tint);
+  font-family: var(--font-mono);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.voice-human .speaker,
+.voice-ai .speaker {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.5em;
+}
+
+.voice-human .speaker {
+  color: var(--human);
+}
+.voice-ai .speaker {
+  color: var(--ai);
+}
+
+/* A run of alternating turns */
+.chat-log {
+  margin: var(--space-3) 0;
+}
+.chat-log blockquote {
+  margin: 0 0 var(--space-1);
+}
+
+/* ---- 6. Warnings & study evidence ------------------------------------------
+   For the material acknowledging risks of AI-companion use. Deliberately
+   restrained — a labelled panel, not a red alert box — so it sits inside a
+   report that is arguing for a considered, not alarmist, view. */
+
+.study-note {
+  margin: var(--space-3) 0;
+  padding: var(--space-2) var(--space-3);
+  background: var(--bg-panel-warn);
+  border-left: 3px solid var(--warn);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.study-note .label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--warn);
+  margin-bottom: 0.5em;
+}
+
+.study-note p:last-child {
+  margin-bottom: 0;
+}
+
+.study-note cite,
+.pull-source {
+  display: block;
+  margin-top: 0.6em;
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+
+/* ---- 7. Pull quotes -------------------------------------------------------- */
+.pull-quote {
+  font-size: var(--step-2);
+  font-weight: 500;
+  line-height: 1.35;
+  max-width: var(--measure-narrow);
+  margin: var(--space-4) auto;
+  padding: 0;
+  background: none;
+  border: none;
+}
+
+.pull-quote::before {
+  content: none;
+}
+
+/* ---- 8. Figures & images ---------------------------------------------------
+   The report is text-focused, so images sit quietly inside the column
+   rather than breaking out full-bleed. */
+
+figure {
+  margin: var(--space-3) 0;
+}
+
+figure img {
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+}
+
+figcaption {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  margin-top: 0.5em;
+  max-width: var(--measure-narrow);
+}
+
+/* ---- 9. Tables -------------------------------------------------------------- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--space-3) 0;
+  font-size: 0.92rem;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.55em 0.8em;
+  border-bottom: 1px solid var(--line);
+}
+
+th {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+
+/* ---- 10. Footnotes & references -------------------------------------------- */
+.footnote-ref {
+  font-family: var(--font-mono);
+  font-size: 0.7em;
+  vertical-align: super;
+  color: var(--ai);
+  text-decoration: none;
+  padding: 0 0.1em;
+}
+
+.references {
+  margin-top: var(--space-5);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--line);
+}
+
+.references h2 {
+  border-top: none;
+  padding-top: 0;
+}
+
+.references ol {
+  list-style: none;
+  padding-left: 0;
+  counter-reset: refs;
+  font-size: 0.92rem;
+}
+
+.references li {
+  counter-increment: refs;
+  position: relative;
+  padding-left: 2.4em;
+  margin-bottom: 0.85em;
+  color: var(--ink-soft);
+}
+
+.references li::before {
+  content: counter(refs);
+  position: absolute;
+  left: 0;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--ink-faint);
+}
+
+.references li strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+.references li a {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+}
+
+/* ---- 11. Page-to-page navigation (multi-page report) ----------------------- */
+.report-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+  max-width: var(--measure);
+  margin: var(--space-5) auto 0;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+
+.report-nav a {
+  color: var(--ink);
+  text-decoration: none;
+}
+.report-nav a:hover {
+  color: var(--ai);
+  text-decoration: underline;
+}
+.report-nav .label {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--ink-faint);
+  margin-bottom: 0.2em;
+}
+.report-nav .next {
+  text-align: right;
+  margin-left: auto;
+}
+
+/* ---- 12. Table of contents (index page) ------------------------------------ */
+.toc {
+  margin: var(--space-3) 0;
+}
+.toc ol {
+  list-style: none;
+  padding-left: 0;
+  counter-reset: toc;
+}
+.toc li {
+  counter-increment: toc;
+  display: flex;
+  align-items: baseline;
+  gap: 0.6em;
+  padding: 0.6em 0;
+  border-bottom: 1px solid var(--line);
+}
+.toc li::before {
+  content: counter(toc, decimal-leading-zero);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--ink-faint);
+}
+.toc a {
+  font-weight: 500;
+  text-decoration: none;
+}
+.toc a:hover {
+  text-decoration: underline;
+}
+.toc .toc-desc {
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+  margin-left: auto;
+  text-align: right;
+}
+
+/* ---- 13. Footer ------------------------------------------------------------- */
+footer {
+  max-width: var(--measure);
+  margin: var(--space-5) auto 0;
+  padding: var(--space-3) var(--space-2) var(--space-4);
+  border-top: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--ink-faint);
+}
+
+/* ---- 14. Responsive --------------------------------------------------------- */
+@media (max-width: 640px) {
+  :root {
+    --step-4: 1.9rem;
+    --step-3: 1.45rem;
+    --step-2: 1.2rem;
+  }
+  .page,
+  main,
+  .masthead,
+  footer,
+  .report-nav {
+    padding-inline: var(--space-2);
+  }
+  .toc li {
+    flex-wrap: wrap;
+  }
+  .toc .toc-desc {
+    margin-left: 1.2em;
+    text-align: left;
+  }
+}
+
+/* ---- 15. Reduced motion / print --------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto !important;
+  }
+}
+
+@media print {
+  body {
+    background: #fff;
+  }
+  .report-nav {
+    display: none;
+  }
+}
